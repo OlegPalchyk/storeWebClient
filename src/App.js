@@ -48,7 +48,7 @@ class App extends Component {
             <p className="App-intro">
         {this.state.fetching
             ? 'Fetching message from API'
-            : this.state.message}
+            : 'Got response from server'}
     </p>
         </div>
     );
