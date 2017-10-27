@@ -1,0 +1,9 @@
+.single-item-image{
+    width:100%;
+    max-width: 100%;
+    height:auto;
+}
+.buttons-wrapper{
+    text-align: right;
+    margin-bottom: 5px;
+}
