@@ -6,7 +6,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            message: null,
+            messages: null,
             fetching: true
         };
     }
@@ -21,12 +21,12 @@ class App extends Component {
     })
     .then(json => {
             this.setState({
-            message: json.message,
+                messages: json.passwords,
             fetching: false
         });
     }).catch(e => {
             this.setState({
-            message: `API call failed: ${e}`,
+                messages: `API call failed: ${e}`,
             fetching: false
         });
     })
@@ -46,9 +46,15 @@ class App extends Component {
             </a><br/>
             </p>
             <p className="App-intro">
-        {this.state.fetching
-            ? 'Fetching message from API'
-            : this.state.message}
+                {this.state.fetching
+                    ? 'Fetching message from API'
+                    :
+                    <div>
+                        {this.state.messages.map((item, index)=>{
+                            return <p key={index}>{item}</p>
+                        })}
+                    </div>
+                }
     </p>
         </div>
     );
