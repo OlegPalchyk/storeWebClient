@@ -15,7 +15,7 @@ class Main extends Component {
         <Provider store={store}>
             <Switch>
                 <Route exact path={'/'} component={Home}/>
-                <Route exact path='/products/:number' component={Item}/>
+                <Route exact path='/products/:productId' component={Item}/>
                 <Route exact path='/create-item' component={CreateItem}/>
             </Switch>
         </Provider>

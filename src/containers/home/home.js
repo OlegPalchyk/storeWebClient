@@ -3,18 +3,25 @@ import Item from "../../components/main/listItem/item";
 import DeleteModal from '../../components/main/listItem/deleteModal';
 import {connect} from "react-redux";
 import './home.css';
-import {deleteItem} from "../../actions/products";
+import {deleteItem, getProducts, GET_ITEMS_FAILURE, GET_ITEMS_SUCCESS} from "../../actions/products";
+import Spinner from '../../components/repeatable/spinner';
 
 
 class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: this.props.products.items || [],
+            items: this.props.products.loaded?this.props.products.items : null,
             showModal: false,
-            deletableItem: {}
+            deletableItem: {},
+            showSpinner : !this.props.products.loaded
 
         };
+    }
+    componentDidMount(){
+        if(!this.props.products.loaded){
+            this.props.dispatch(getProducts());
+        }
     }
 
     deleteItem(id) {
@@ -36,17 +43,33 @@ class Home extends Component {
         this.props.history.push(`/products/${id}`);
     }
 
+    componentWillReceiveProps(nextProps){
+        if(nextProps.products.type === GET_ITEMS_SUCCESS){
+            this.setState({
+                items : nextProps.products.items,
+                showSpinner : false
+            })
+        }
+    }
+
     render() {
         return (
             <div className="home-page">
-                {this.props.products.items ? (
-                    this.state.items.map((item)=> {
-                        return <Item key={item.id} item={item} deleteItem={()=>this.deleteItemFromModal(item)}
-                                     showItem={()=> {
-                                         this.showItem(item.id)
-                                     }}/>
-                    })
-                ) : (<span>Empty</span>)}
+                {this.state.showSpinner?
+                    <Spinner/>
+                    :
+                    this.props.products.items.length > 0 ?
+                        this.state.items.map((item)=> {
+                            return <Item key={item._id} item={item} deleteItem={()=>this.deleteItemFromModal(item)}
+                                         showItem={()=> {
+                                             this.showItem(item._id)
+                                         }}/>
+                        })
+                     : <span>Empty</span>
+                }
+
+
+
                 {this.state.showModal ? (
                     <DeleteModal item={this.state.deletableItem} cancel={()=> {
                         this.setState({showModal: false,deletableItem : {} })

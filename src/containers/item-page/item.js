@@ -20,7 +20,7 @@ class ItemPage extends Component {
 
     componentWillMount() {
         let item = this.props.products.items.find((item)=> {
-            return item.id === parseInt(this.props.match.params.number, 10)
+            return item._id === this.props.match.params.productId
         });
 
         if (!item) {
