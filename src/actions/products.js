@@ -1,8 +1,15 @@
 import {callApi} from '../utils/apiUtils';
+import store from "../store/store";
 
 export const GET_ITEMS_REQUEST = "GET_ITEMS_REQUEST";
 export const GET_ITEMS_SUCCESS = "GET_ITEMS_SUCCESS";
 export const GET_ITEMS_FAILURE = "GET_ITEMS_FAILURE";
+
+export const GET_ITEM_REQUEST = "GET_ITEM_REQUEST";
+export const GET_ITEM_SUCCESS = "GET_ITEM_SUCCESS";
+export const GET_ITEM_FAILURE = "GET_ITEM_FAILURE";
+
+
 
 export const ADD_PRODUCT_REQUEST = "ADD_PRODUCT_REQUEST";
 export const ADD_PRODUCT_SUCCESS = "GET_ITEMS_SUCCESS";
@@ -22,7 +29,7 @@ export function getProducts(){
         "",
         config,
         getProductsRequest(),
-        getProductsSuccess,
+        [getProductsSuccess,getProduct],
         getProductsFailure
     );
 }
@@ -44,6 +51,44 @@ function getProductsSuccess(response) {
     }
 }
 
+
+export function getProduct(id){
+    const config = {
+        method: "get",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+
+    };
+    console.log(id.products[0]._id);
+
+    return callApi(
+        `/${id.products[0]._id}`,
+        config,
+        getProductRequest(),
+        getProductSuccess,
+        getProductFailure,
+
+    )
+}
+function getProductRequest() {
+    return {
+        type : GET_ITEM_REQUEST
+    }
+}
+function getProductFailure(error) {
+
+    return {
+        type : GET_ITEM_FAILURE,
+        error
+    }
+}
+function getProductSuccess(response) {
+    return {
+        type : GET_ITEM_SUCCESS,
+        item : response.product
+    }
+}
 
 export function addItem(item) {
     const config = {

@@ -25,7 +25,7 @@ export function parseJSON(response) {
  * @param url The restful service end point.
  * @param config The config object of the call. Can be null.
  * @param request The request action.
- * @param onRequestSuccess The callback function to create request success action.
+ * @param onRequestSuccessCallbacks The callback function to create request success action.
  *                 The function expects response json payload as its argument.
  * @param onRequestFailure The callback function to create request failure action.
  *                 The function expects error as its argument.
@@ -33,19 +33,21 @@ export function parseJSON(response) {
 export function callApi(url,
                         config,
                         request,
-                        onRequestSuccess,
+                        onRequestSuccessCallbacks,
                         onRequestFailure) {
     return dispatch => {
-
         dispatch(request);
         let format_endpoint = function (url) {
             return HOST + '/api' + url
         };
+
         return fetch(format_endpoint(url), config)
             .then(checkStatus)
             .then(parseJSON)
             .then(json => {
-                dispatch(onRequestSuccess(json));
+                onRequestSuccessCallbacks instanceof Array
+                    ? onRequestSuccessCallbacks.map(fn => dispatch(fn(json)))
+                    : dispatch(onRequestSuccessCallbacks(json));
             })
             .catch(error => {
 

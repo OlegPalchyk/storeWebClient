@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Item from '../../components/item/item';
 import './singleItem.css';
-import {deleteItem, DELETE_PRODUCT_SUCCESS, updateItem, UPDATE_PRODUCT_SUCCESS} from "../../actions/products";
+import {deleteItem, getProduct, GET_ITEM_SUCCESS, DELETE_PRODUCT_SUCCESS, updateItem, UPDATE_PRODUCT_SUCCESS} from "../../actions/products";
 import {connect} from "react-redux";
 import DeleteModal from '../../components/main/listItem/deleteModal';
 import EditItem from './editItem';
@@ -18,17 +18,8 @@ class ItemPage extends Component {
         }
     }
 
-    componentWillMount() {
-        let item = this.props.products.items.find((item)=> {
-            return item._id === this.props.match.params.productId
-        });
-
-        if (!item) {
-            this.props.history.push('/');
-        }
-        this.setState({
-            item
-        })
+    componentDidMount() {
+        this.props.dispatch(getProduct(this.props.match.params.productId))
     }
 
     deleteModal() {
@@ -55,6 +46,13 @@ class ItemPage extends Component {
 
             })
         }
+
+        if(nextProps.products.type === GET_ITEM_SUCCESS){
+            this.setState({
+                item : nextProps.products.singleItem
+            })
+        }
+
     }
 
     editItem() {

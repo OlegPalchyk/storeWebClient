@@ -4,7 +4,10 @@ import {
     UPDATE_PRODUCT_SUCCESS,
     GET_ITEMS_SUCCESS,
     GET_ITEMS_FAILURE,
-    GET_ITEMS_REQUEST
+    GET_ITEMS_REQUEST,
+    GET_ITEM_FAILURE,
+    GET_ITEM_REQUEST,
+    GET_ITEM_SUCCESS
 } from '../actions/products';
 
 function initializeState() {
@@ -16,6 +19,21 @@ function initializeState() {
 
 export default function products(state = initializeState(), action = {}) {
     switch (action.type) {
+        case GET_ITEM_REQUEST : {
+            return Object.assign({}, state, {type : action.type})
+        }
+        case GET_ITEM_FAILURE : {
+            return Object.assign({}, state, {
+                type: action.type,
+                message : action.error
+            });
+        }
+        case GET_ITEM_SUCCESS : {
+            return Object.assign({}, state , {
+                type : action.type,
+                singleItem : action.item 
+            })
+        }
         case GET_ITEMS_REQUEST : {
             return Object.assign({}, state, {
                 type: action.type,

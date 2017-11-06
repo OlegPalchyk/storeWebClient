@@ -16,8 +16,8 @@ const Item = ({item, deleteItem, editItem}) => {
                      <Button bsStyle="danger" onClick={()=>deleteItem()}>Delete</Button>
                  </div>
                  <p className="single-item-title">{title}</p>
-                 <p className="single-item-price">{price +" "} $</p>
-                 <p className="single-item-description">{description} $</p>
+                 <p className="single-item-price">$ {price +" "}</p>
+                 <p className="single-item-description">{description}</p>
              </Col>
          </Grid>
 

@@ -20,7 +20,7 @@ class Home extends Component {
     }
     componentDidMount(){
         if(!this.props.products.loaded){
-            this.props.dispatch(getProducts());
+            this.props.dispatch(getProducts())
         }
     }
 
