@@ -1,5 +1,4 @@
 import {callApi} from '../utils/apiUtils';
-import store from "../store/store";
 
 export const GET_ITEMS_REQUEST = "GET_ITEMS_REQUEST";
 export const GET_ITEMS_SUCCESS = "GET_ITEMS_SUCCESS";
@@ -29,7 +28,7 @@ export function getProducts(){
         "",
         config,
         getProductsRequest(),
-        [getProductsSuccess,getProduct],
+        [getProductsSuccess,autoCallFirstProduct],
         getProductsFailure
     );
 }
@@ -51,7 +50,30 @@ function getProductsSuccess(response) {
     }
 }
 
+export function autoCallFirstProduct(json){
+    const config = {
+        method: "get",
+        headers: {
+            'Content-Type': 'application/json'
+        }
 
+    };
+
+    if(json.products.length > 0){
+        return callApi(
+            `/${json.products[0]._id}`,
+            config,
+            getProductRequest(),
+            getProductSuccess,
+            getProductFailure,
+
+        )
+    }else{
+        return null;
+    }
+
+
+}
 export function getProduct(id){
     const config = {
         method: "get",
@@ -60,10 +82,9 @@ export function getProduct(id){
         }
 
     };
-    console.log(id.products[0]._id);
 
     return callApi(
-        `/${id.products[0]._id}`,
+        `/${id}`,
         config,
         getProductRequest(),
         getProductSuccess,
