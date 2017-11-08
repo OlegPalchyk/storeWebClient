@@ -14,10 +14,10 @@ class EditItem extends Component {
         super(props);
         this.state = {
             title: this.props.item.title,
-            id :this.props.item.id,
             price: this.props.item.price,
             description: this.props.item.description,
-            file: this.props.item.url,
+            fileUrl: this.props.item.images[0].url,
+            file: null,
             showValid: false,
             errorFields: {},
 
@@ -47,10 +47,7 @@ class EditItem extends Component {
             }
         }
 
-        if (this.state.file.length === 0) {
-            errorFields['file'] = true;
-            invalid = true;
-        }
+
         return !invalid ? false : errorFields;
     }
 
@@ -66,11 +63,13 @@ class EditItem extends Component {
         let newItem = {
             "title": this.state.title,
             "price": +this.state.price,
-            "url": this.state.file,
             "description": this.state.description,
-            id : this.state.id
+
         };
-        this.props.updateItem(newItem)
+        if(this.state.file){
+            newItem.images = this.state.file
+        }
+        this.props.updateItem(this.props.item._id, newItem)
     }
 
     handleChange(event) {
@@ -101,7 +100,8 @@ class EditItem extends Component {
 
     readFile(event) {
         let reader = new FileReader();
-        let file = event.target.files[0];
+        let sentFile;
+        let file =  sentFile = event.target.files[0];
         let fileType = file.type;
         let size = file.size;
         let imageTYpes = ["image/gif", "image/jpeg", "image/png"];
@@ -112,7 +112,8 @@ class EditItem extends Component {
         }
         reader.onload = (file)=> {
             this.setState({
-                file: file.target.result,
+                fileUrl: file.target.result,
+                file: sentFile,
 
             })
         };

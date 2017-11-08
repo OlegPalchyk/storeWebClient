@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import {Button, Image} from 'react-bootstrap';
 
 const Item = ({item, deleteItem, showItem}) => {
-    const {title, price, url} = item;
+    const {title, price, images} = item;
      return (
         <div className="product-list-item">
-            <Image src={url} thumbnail onClick={()=>showItem()}/>
+            <Image src={images[0].url} thumbnail onClick={()=>showItem()}/>
 
             <div className="product-list-detail">
                 <p className="product-list-item-title">{title}</p>
@@ -22,7 +22,7 @@ const Item = ({item, deleteItem, showItem}) => {
 Item.propTypes = {
     item: PropTypes.shape({
         title: PropTypes.string.isRequired,
-        url: PropTypes.string.isRequired,
+        images: PropTypes.array.isRequired,
         price: PropTypes.number.isRequired,
 
     }).isRequired,

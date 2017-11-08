@@ -4,11 +4,11 @@ import { Grid, Col, Image, Button} from 'react-bootstrap';
 
 
 const Item = ({item, deleteItem, editItem}) => {
-    const {title, price, url , description} = item;
+    const {title, price, images , description} = item;
      return (
          <Grid>
              <Col xs={12} md={4} lg={3} >
-                 <Image src={url} thumbnail />
+                 <Image src={images[0].url} thumbnail />
              </Col>
              <Col xs={12} md={8} lg={9}>
                  <div className="buttons-wrapper">
@@ -27,7 +27,7 @@ const Item = ({item, deleteItem, editItem}) => {
 Item.propTypes = {
     item: PropTypes.shape({
         title: PropTypes.string.isRequired,
-        url: PropTypes.string.isRequired,
+        images: PropTypes.array.isRequired,
         price: PropTypes.number.isRequired,
         description : PropTypes.string.isRequired
 

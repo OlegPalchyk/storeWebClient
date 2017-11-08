@@ -1,4 +1,5 @@
 import {callApi} from '../utils/apiUtils';
+import toFormData from '../helperFunction/object-to-form-data';
 
 export const GET_ITEMS_REQUEST = "GET_ITEMS_REQUEST";
 export const GET_ITEMS_SUCCESS = "GET_ITEMS_SUCCESS";
@@ -8,13 +9,20 @@ export const GET_ITEM_REQUEST = "GET_ITEM_REQUEST";
 export const GET_ITEM_SUCCESS = "GET_ITEM_SUCCESS";
 export const GET_ITEM_FAILURE = "GET_ITEM_FAILURE";
 
+export const DELETE_PRODUCT_REQUEST = "DELETE_PRODUCT_REQUEST";
+export const DELETE_PRODUCT_SUCCESS = "DELETE_PRODUCT_SUCCESS";
+export const DELETE_PRODUCT_FAILURE = "DELETE_PRODUCT_FAILURE";
+
+export const UPDATE_PRODUCT_REQUEST = "UPDATE_PRODUCT_REQUEST";
+export const UPDATE_PRODUCT_SUCCESS = "UPDATE_PRODUCT_SUCCESS";
+export const UPDATE_PRODUCT_FAILURE = "UPDATE_PRODUCT_FAILURE";
 
 
 export const ADD_PRODUCT_REQUEST = "ADD_PRODUCT_REQUEST";
-export const ADD_PRODUCT_SUCCESS = "GET_ITEMS_SUCCESS";
+export const ADD_PRODUCT_SUCCESS = "ADD_PRODUCT_SUCCESS";
 export const ADD_PRODUCT_FAILURE = "ADD_PRODUCT_FAILURE";
-export const DELETE_PRODUCT_SUCCESS = 'DELETE_PRODUCT_SUCCESS';
-export const UPDATE_PRODUCT_SUCCESS = 'UPDATE_PRODUCT_SUCCESS';
+
+export const LAST_ADDED_PRODUCT = 'LAST_ADDED_PRODUCT';
 
 export function getProducts(){
     const config = {
@@ -28,7 +36,7 @@ export function getProducts(){
         "",
         config,
         getProductsRequest(),
-        [getProductsSuccess,autoCallFirstProduct],
+        getProductsSuccess,
         getProductsFailure
     );
 }
@@ -50,30 +58,6 @@ function getProductsSuccess(response) {
     }
 }
 
-export function autoCallFirstProduct(json){
-    const config = {
-        method: "get",
-        headers: {
-            'Content-Type': 'application/json'
-        }
-
-    };
-
-    if(json.products.length > 0){
-        return callApi(
-            `/${json.products[0]._id}`,
-            config,
-            getProductRequest(),
-            getProductSuccess,
-            getProductFailure,
-
-        )
-    }else{
-        return null;
-    }
-
-
-}
 export function getProduct(id){
     const config = {
         method: "get",
@@ -113,49 +97,102 @@ function getProductSuccess(response) {
 
 export function addItem(item) {
     const config = {
-        method: "post",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body : JSON.stringify(item)
-
+        method: "put",
+        body : toFormData(item)
     };
     return callApi(
         "",
         config,
-        addProductsRequest(),
-        addProductsSuccess,
-        addProductsFailure
+        addProductRequest(),
+        addProductSuccess,
+        addProductFailure
     );
 }
-function addProductsRequest() {
+function addProductRequest() {
     return {
         type : ADD_PRODUCT_REQUEST
     }
 }
-function addProductsFailure(error) {
+function addProductFailure(error) {
     return {
         type : ADD_PRODUCT_FAILURE,
         error
     }
 }
-
-function addProductsSuccess(response) {
+function addProductSuccess(response) {
     return {
         type : ADD_PRODUCT_SUCCESS,
-        product : response.prod
+        payload : response.prod
     }
 }
+
 export function deleteItem(id){
+    const config = {
+        method: "delete",
+        body : JSON.stringify({id})
+    };
+    return callApi(
+        `/${id}`,
+        config,
+        deleteItemRequest(),
+        deleteItemSuccess,
+        deleteItemFailure
+    );
+}
+function deleteItemRequest(){
+    return {
+        type : DELETE_PRODUCT_REQUEST
+    }
+}
+function deleteItemFailure(error) {
+    return {
+        type : DELETE_PRODUCT_FAILURE,
+        error
+    }
+}
+function deleteItemSuccess(response) {
     return {
         type : DELETE_PRODUCT_SUCCESS,
-        id
+        payload : response.id
     }
 }
-export function updateItem(item){
+
+
+export function clearLastAddedProdut (){
+    return {
+        type : LAST_ADDED_PRODUCT
+    }
+}
+
+export function updateItem(id,item){
+    const config = {
+        method: "post",
+        body : toFormData(item)
+    };
+    return callApi(
+        `/${id}`,
+        config,
+        updateProductRequest(),
+        updateProductSuccess,
+        updateProductFailure
+    );
+}
+
+function updateProductRequest() {
+    return {
+        type : UPDATE_PRODUCT_REQUEST
+    }
+}
+function updateProductFailure(error) {
+    return {
+        type : UPDATE_PRODUCT_FAILURE,
+        error
+    }
+}
+function updateProductSuccess(response) {
     return {
         type : UPDATE_PRODUCT_SUCCESS,
-        item
+        payload : response.product
     }
 }
 

@@ -27,8 +27,6 @@ const DeleteModal = ({item, cancel,apply}) => {
 DeleteModal.propTypes = {
     item: PropTypes.shape({
         title: PropTypes.string.isRequired,
-        id: PropTypes.number.isRequired,
-
     }).isRequired,
     cancel :PropTypes.func.isRequired,
     apply :PropTypes.func.isRequired

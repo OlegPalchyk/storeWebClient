@@ -19,6 +19,7 @@ class CreateItem extends Component {
             title: "",
             price: "",
             description: "",
+            fileUrl: "",
             file: "",
             showValid: false,
             errorFields: {}
@@ -59,7 +60,7 @@ class CreateItem extends Component {
         let newItem = {
             "title": this.state.title,
             "price": +this.state.price,
-            "url": this.state.file,
+            "file": this.state.file,
             "description": this.state.description
         };
         this.props.dispatch(addItem(newItem));
@@ -91,8 +92,12 @@ class CreateItem extends Component {
     }
 
     readFile(event) {
+        if(event.target.files.length === 0){
+            return;
+        }
         let reader = new FileReader();
-        let file = event.target.files[0];
+        let sentFile;
+        let file =  sentFile = event.target.files[0];
         let fileType = file.type;
         let size = file.size;
         let imageTYpes = ["image/gif", "image/jpeg", "image/png"];
@@ -102,8 +107,10 @@ class CreateItem extends Component {
             return;
         }
         reader.onload = (file)=> {
+
             this.setState({
-                file: file.target.result,
+                fileUrl: file.target.result,
+                file: sentFile,
 
             })
         };
@@ -150,7 +157,7 @@ class CreateItem extends Component {
                         id="formControlsFile"
                         type="file"
                         label="File"
-                        name="file"
+                        name="fileUrl"
                         accept="image/*"
                         onChange={(e)=> {
                             this.readFile(e)
