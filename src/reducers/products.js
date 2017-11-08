@@ -119,7 +119,7 @@ export default function products(state = initializeState(), action = {}) {
             let items = state.items;
 
             if (state.loaded) {
-                let itemIndex = state.items.find((item) => {
+                let itemIndex = state.items.findIndex((item) => {
                     return item._id === action.payload;
                 });
                 if (itemIndex === -1) {
