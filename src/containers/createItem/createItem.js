@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, FormControl, HelpBlock, ControlLabel, FormGroup} from 'react-bootstrap';
 import {connect} from "react-redux";
-import {addItem, ADD_PRODUCT_SUCCESS} from "../../actions/products";
+import {addItem, ADD_PRODUCT_SUCCESS} from "../../actions/product";
 import './createItem.css';
 const FieldGroup = ({id, label, help, validationState, ...props})=> {
     return (
@@ -118,8 +118,8 @@ class CreateItem extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.products.type === ADD_PRODUCT_SUCCESS) {
-            this.props.history.push(`/products/${nextProps.products.lastAddedItemId}`);
+        if (nextProps.product.type === ADD_PRODUCT_SUCCESS) {
+            this.props.history.push(`/product/${nextProps.product.lastAddedItemId}`);
         }
     }
 
@@ -187,9 +187,9 @@ class CreateItem extends Component {
 }
 
 function mapStateToProps(state) {
-    const {products} = state;
+    const {product} = state;
     return {
-        products
+        product
     }
 }
 

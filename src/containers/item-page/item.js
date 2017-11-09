@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import Item from '../../components/item/item';
 import './singleItem.css';
-import {deleteItem, getProduct, UPDATE_PRODUCT_SUCCESS, DELETE_PRODUCT_SUCCESS, updateItem} from "../../actions/products";
+import {deleteItem, getProduct, UPDATE_PRODUCT_SUCCESS, DELETE_PRODUCT_SUCCESS, updateItem} from "../../actions/product";
 import DeleteModal from '../../components/main/listItem/deleteModal';
 import EditItem from './editItem';
 
@@ -33,10 +33,10 @@ class ItemPage extends Component {
 
     componentWillReceiveProps(nextProps) {
 
-        if (nextProps.products.type === DELETE_PRODUCT_SUCCESS) {
+        if (nextProps.product.type === DELETE_PRODUCT_SUCCESS) {
             this.props.history.push('/');
         }
-        if(nextProps.products.type === UPDATE_PRODUCT_SUCCESS){
+        if(nextProps.product.type === UPDATE_PRODUCT_SUCCESS){
             this.cancelEdit();
         }
     }
@@ -61,16 +61,16 @@ class ItemPage extends Component {
     render() {
 
         return (
-            !this.props.products.itemLoading ? (
+            !this.props.product.itemLoading ? (
                 <div className="item-page">
                     {
                         this.state.edit ? (
-                            <EditItem item={Object.assign({}, this.props.products.singleItem)} cancelEdit={()=>this.cancelEdit()}
+                            <EditItem item={Object.assign({}, this.props.product.singleItem)} cancelEdit={()=>this.cancelEdit()}
                                       updateItem={(id, item)=>this.updateItem(id, item)}/>
                         ) : (
 
-                            this.props.products.singleItem?
-                                <Item item={this.props.products.singleItem} deleteItem={()=> {
+                            this.props.product.singleItem?
+                                <Item item={this.props.product.singleItem} deleteItem={()=> {
                                 this.deleteModal()
                             }} showItem="" editItem={()=> {
                                 this.editItem()
@@ -79,10 +79,10 @@ class ItemPage extends Component {
                     }
 
                     {this.state.showModal ? (
-                        <DeleteModal item={this.props.products.singleItem} cancel={()=> {
+                        <DeleteModal item={this.props.product.singleItem} cancel={()=> {
                             this.setState({showModal: false})
                         }} apply={()=> {
-                            this.deleteItem(this.props.products.singleItem._id)
+                            this.deleteItem(this.props.product.singleItem._id)
                         }}/>
                     ) : null}
                 </div>
@@ -96,9 +96,9 @@ class ItemPage extends Component {
 
 
 function mapStateToProps(state) {
-    const {products} = state;
+    const {product} = state;
     return {
-        products
+        product
     }
 }
 

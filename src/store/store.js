@@ -1,12 +1,14 @@
 import {createStore, applyMiddleware, combineReducers, compose} from "redux";
 import thunkMiddleware from "redux-thunk";
 import products from '../reducers/products';
+import product from '../reducers/product';
 import logger from "redux-logger";
 import {routerReducer} from "react-router-redux";
 
 
 const rootReducer = combineReducers({
     products,
+    product,
     routing: routerReducer
 
 });
